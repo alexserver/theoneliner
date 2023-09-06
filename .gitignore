@@ -131,6 +131,7 @@ dist
 
 # remix v1
 /.cache
-/build
+/.netlify
 /public/build
-
+/build
+.env

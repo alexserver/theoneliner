@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap');
+
+body {
+  margin: 0;
+}
+
+img.joke {
+  max-width: 75%;
+  max-height: 100%;
+
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 1.5em;
+  background-color: #000;
+  color: #ffffff;
+  opacity: 0.7;
+  padding: 5px;
+  border-radius: 4px;
+  max-width: 70%;
+}
+
+div.back {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: 920px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+div.pic01 {
+  background-image: url(public/images/01.jpg);
+}
+div.pic02 {
+  background-image: url(public/images/02.jpg);
+}
+div.pic03 {
+  background-image: url(public/images/03.jpg);
+}
+div.pic04 {
+  background-image: url(public/images/04.jpg);
+}
+div.pic05 {
+  background-image: url(public/images/05.jpg);
+}
+div.pic06 {
+  background-image: url(public/images/06.jpg);
+}
+div.pic07 {
+  background-image: url(public/images/07.jpg);
+}
+div.pic08 {
+  background-image: url(public/images/08.jpg);
+}
+div.pic09 {
+  background-image: url(public/images/09.jpg);
+}
+div.pic10 {
+  background-image: url(public/images/10.jpg);
+}
+div.pic11 {
+  background-image: url(public/images/11.jpg);
+}
