@@ -20,7 +20,7 @@ export async function loader(params: LoaderArgs) {
 
 export default function () {
   const { joke } = useLoaderData();
-  const picNumber = zeroPad(Math.floor(Math.random() * 11), 2);
+  const picNumber = zeroPad(Math.floor(Math.random() * 10), 2);
   const backgroundClass = `back pic${picNumber}`;
   return (
     <div className={backgroundClass}>
