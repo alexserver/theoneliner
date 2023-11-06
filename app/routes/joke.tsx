@@ -1,7 +1,7 @@
-import supabase from "~/lib/supabase";
 import { json, type LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import styles from "~/styles/joke.css";
+import { prisma } from '~/lib/prisma.server';
 
 function zeroPad(num: number, totalLength: number): string {
   return String(num).padStart(totalLength, "0");
@@ -12,9 +12,12 @@ export function links() {
 }
 
 export async function loader(params: LoaderArgs) {
-  const { data: joke, error } = await supabase.rpc("one_joke").single();
-
-  console.log(joke);
+  const jokesCount = await prisma.joke.count();
+  const jokes = await prisma.joke.findMany({
+    take: 1,
+    skip: Math.floor(Math.random() * jokesCount),
+  });
+  const joke = jokes.at(0);
   return json({ joke });
 }
 
