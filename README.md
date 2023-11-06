@@ -1,4 +1,9 @@
-# Welcome to Remix!
+# The Oneliner
+A random joke comedian
+
+![screen capture](./app/images/screenshot.png)
+
+This app has been made with Remix
 
 - [Remix Docs](https://remix.run/docs)
 
