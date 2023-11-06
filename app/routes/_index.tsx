@@ -1,5 +1,5 @@
 import { json, type LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Form } from "@remix-run/react";
 import { prisma } from "~/lib/prisma.server";
 import randomImage from "~/lib/imageslist";
 
@@ -37,7 +37,7 @@ export default function () {
           </svg>
         </a>
       </div>
-      <div className="w-full bg-gradient-to-b from-indigo-800 to-slate-900 h-screen flex justify-center items-center z-0">
+      <div className="w-full bg-gradient-to-b from-indigo-800 to-slate-900 h-screen flex flex-col justify-center items-center z-0 gap-20">
         <img
           alt="laugh"
           src={pic}
@@ -46,6 +46,14 @@ export default function () {
         <h1 className="text-3xl text-center text-white bg-slate-900 rounded-xl z-10 p-4 opacity-80 font-bold max-w-3xl">
           {joke.content}
         </h1>
+        <Form method="get" className="z-10">
+          <button
+            type="submit"
+            className="bg-indigo-800 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+          >
+            Another Joke
+          </button>
+        </Form>
       </div>
     </>
   );
