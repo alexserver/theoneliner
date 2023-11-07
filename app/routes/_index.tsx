@@ -1,6 +1,6 @@
 import { json, type LoaderArgs } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
-import { prisma } from "~/lib/prisma.server";
+// import { prisma } from "~/lib/prisma.server";
 import randomImage from "~/lib/imageslist";
 import supabase from "~/lib/supabase";
 
@@ -13,12 +13,13 @@ async function getJokeFromSupabase() {
 }
 
 async function getJokeFromPrisma() {
-  const jokesCount = await prisma.joke.count();
-  const jokes = await prisma.joke.findMany({
-    take: 1,
-    skip: Math.floor(Math.random() * jokesCount),
-  });
-  return jokes.at(0);
+  // const jokesCount = await prisma.joke.count();
+  // const jokes = await prisma.joke.findMany({
+  //   take: 1,
+  //   skip: Math.floor(Math.random() * jokesCount),
+  // });
+  // return jokes.at(0);
+  return {};
 }
 
 export async function loader(params: LoaderArgs) {
