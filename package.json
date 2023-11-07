@@ -5,8 +5,7 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "netlify serve",
-    "typecheck": "tsc",
-    "postinstall": "prisma generate"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@netlify/functions": "^1.4.0",
