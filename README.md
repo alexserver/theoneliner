@@ -1,5 +1,6 @@
 # The Oneliner
 A random joke comedian
+View it [https://theoneliner.netlify.app](https://theoneliner.netlify.app)
 
 ![screen capture](./app/images/screenshot.png)
 
