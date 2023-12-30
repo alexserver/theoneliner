@@ -1,9 +1,12 @@
 # The Oneliner
 
 A random joke comedian
-View it [https://theoneliner.netlify.app](https://theoneliner.netlify.app)
+View it [https://theoneliner.vercel.app/](https://theoneliner.vercel.app/)
 
-![screen capture](./app/images/screenshot.png)
+## Screens
+
+![screen capture](./docs/assets/screen01.png)
+![screen capture](./docs/assets/screen02.png)
 
 This app has been made with Remix
 
