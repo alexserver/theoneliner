@@ -5,7 +5,7 @@ import {
   type MetaFunction,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { prisma } from "~/lib/db.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -39,23 +39,19 @@ const fetchRandomImage = async (): Promise<Record<string, any> | null> => {
   return null;
 };
 
+async function getJoke() {
+  const count = await prisma.joke.count();
+  const jokes = await prisma.joke.findMany({
+    take: 1,
+    skip: Math.floor(Math.random() * count),
+  });
+  return jokes.at(0);
+}
+
 export async function loader(/*params: LoaderFunctionArgs*/) {
-  const jokes = [
-    {
-      id: "1",
-      content: "My IQ test results came back. They were negative.",
-      author: "Anonymous",
-    },
-    {
-      id: "2",
-      content:
-        "Before you marry a person, you should first make them use a computer with a slow Internet connection to see who they really are.",
-      author: "Anonymous",
-    },
-  ];
-  const randomIndex = Math.floor(Math.random() * jokes.length);
-  const joke = jokes[randomIndex];
+  const joke = await getJoke();
   const image = await fetchRandomImage();
+  console.log({ joke });
   console.log({ image });
   return json({ joke, image });
 }
