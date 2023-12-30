@@ -1,15 +1,42 @@
+import { unsplash } from "~/lib/unsplash.server";
 import {
   json,
   type LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
     { title: "The Oneliner" },
     { name: "description", content: "A Random joke generator" },
   ];
+};
+
+const fetchRandomImage = async (): Promise<Record<string, any> | null> => {
+  try {
+    const result = await unsplash.photos.getRandom({
+      collectionIds: [
+        "4921005",
+        "1344310",
+        "wGTIMDscrNs",
+        "3727708",
+        "9525949",
+      ],
+    });
+    if (result && result.response) {
+      const newImages = result.response as Record<string, any>;
+      console.log({ newImages });
+      return newImages;
+    } else {
+      console.error("Failed to get images from Unsplash");
+      return null;
+    }
+  } catch (err) {
+    console.error("Error loading unpslash images ", err);
+  }
+  return null;
 };
 
 export async function loader(/*params: LoaderFunctionArgs*/) {
@@ -28,11 +55,13 @@ export async function loader(/*params: LoaderFunctionArgs*/) {
   ];
   const randomIndex = Math.floor(Math.random() * jokes.length);
   const joke = jokes[randomIndex];
-  return json({ joke });
+  const image = await fetchRandomImage();
+  console.log({ image });
+  return json({ joke, image });
 }
 
 export default function Index() {
-  const { joke } = useLoaderData<typeof loader>();
+  const { joke, image } = useLoaderData<typeof loader>();
   return (
     <div className="w-full">
       <div className="fixed top-0 w-full text-lg bg-gradient-to-r from-indigo-800 to-indigo-300 flex justify-between items-center z-20 p-1 text-slate-800">
@@ -59,6 +88,11 @@ export default function Index() {
         </a>
       </div>
       <div className="w-full bg-gradient-to-b from-indigo-800 to-slate-900 h-screen flex flex-col justify-center items-center z-0 gap-20">
+        <img
+          alt="laugh"
+          src={image ? image.urls.full : ""}
+          className="w-full object-cover h-screen absolute top-0 left-0 z-0"
+        />
         <h1 className="text-3xl text-center text-white bg-slate-900 rounded-xl z-10 p-4 opacity-80 font-bold max-w-3xl">
           {joke.content}
         </h1>
@@ -67,7 +101,7 @@ export default function Index() {
             type="submit"
             className="bg-indigo-800 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
           >
-            Another Joke
+            Hit me!
           </button>
         </Form>
       </div>
