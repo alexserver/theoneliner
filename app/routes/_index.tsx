@@ -1,47 +1,82 @@
-import { json, type LoaderArgs } from "@remix-run/node";
-import { useLoaderData, Form } from "@remix-run/react";
-// import { prisma } from "~/lib/prisma.server";
-import randomImage from "~/lib/imageslist";
-import supabase from "~/lib/supabase";
+import { unsplash } from "~/lib/unsplash.server";
+import {
+  json,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import { prisma } from "~/lib/db.server";
 
-async function getJokeFromSupabase() {
-  const { data: joke, error } = await supabase.rpc("one_joke");
-  if (error) {
-    return {};
+export const meta: MetaFunction = () => {
+  return [
+    { title: "The Oneliner" },
+    { name: "description", content: "A Random joke generator" },
+  ];
+};
+
+const fetchRandomImage = async (): Promise<Record<string, any> | null> => {
+  try {
+    const result = await unsplash.photos.getRandom({
+      collectionIds: [
+        "4921005",
+        "1344310",
+        "wGTIMDscrNs",
+        "3727708",
+        "9525949",
+      ],
+    });
+    if (result && result.response) {
+      const newImages = result.response as Record<string, any>;
+      return newImages;
+    } else {
+      console.error("Failed to get images from Unsplash");
+      return null;
+    }
+  } catch (err) {
+    console.error("Error loading unpslash images ", err);
+  }
+  return null;
+};
+
+async function getJoke() {
+  let joke = null;
+  try {
+    const count = await prisma.joke.count();
+    const jokes = await prisma.joke.findMany({
+      take: 1,
+      skip: Math.floor(Math.random() * count),
+    });
+    joke = jokes.at(0);
+  } catch (err) {
+    console.error("Prisma failed to fetch joke ", err);
   }
   return joke;
 }
 
-async function getJokeFromPrisma() {
-  // const jokesCount = await prisma.joke.count();
-  // const jokes = await prisma.joke.findMany({
-  //   take: 1,
-  //   skip: Math.floor(Math.random() * jokesCount),
-  // });
-  // return jokes.at(0);
-  return {};
+export async function loader(/*params: LoaderFunctionArgs*/) {
+  const joke = await getJoke();
+  const image = await fetchRandomImage();
+  // console.log({ joke });
+  // console.log({ image });
+  return json({ joke, image });
 }
 
-export async function loader(params: LoaderArgs) {
-  let joke: any = {};
-  if (process.env.DB_PROVIDER === "supabase") {
-    joke = await getJokeFromSupabase();
+export default function Index() {
+  const { joke, image } = useLoaderData<typeof loader>();
+  if (!joke || !image) {
+    return <div>No data</div>;
   }
-  if (process.env.DB_PROVIDER === "prisma") {
-    joke = await getJokeFromPrisma();
-  }
-  return json({ joke });
-}
 
-export default function () {
-  const { joke } = useLoaderData();
-  const pic = randomImage();
   return (
-    <>
+    <div className="w-full">
       <div className="fixed top-0 w-full text-lg bg-gradient-to-r from-indigo-800 to-indigo-300 flex justify-between items-center z-20 p-1 text-slate-800">
         <h3 className="text-2xl text-white">The oneliner</h3>
         <p>A random joke comedian</p>
-        <a href="https://github.com/alexserver/theoneliner" target="_blank">
+        <a
+          href="https://github.com/alexserver/theoneliner"
+          target="_blank"
+          rel="noreferrer"
+        >
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white"
             aria-hidden="true"
@@ -60,7 +95,7 @@ export default function () {
       <div className="w-full bg-gradient-to-b from-indigo-800 to-slate-900 h-screen flex flex-col justify-center items-center z-0 gap-20">
         <img
           alt="laugh"
-          src={pic}
+          src={image ? image.urls.full : ""}
           className="w-full object-cover h-screen absolute top-0 left-0 z-0"
         />
         <h1 className="text-3xl text-center text-white bg-slate-900 rounded-xl z-10 p-4 opacity-80 font-bold max-w-3xl">
@@ -71,10 +106,10 @@ export default function () {
             type="submit"
             className="bg-indigo-800 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
           >
-            Another Joke
+            Hit me!
           </button>
         </Form>
       </div>
-    </>
+    </div>
   );
 }
