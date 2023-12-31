@@ -27,7 +27,6 @@ const fetchRandomImage = async (): Promise<Record<string, any> | null> => {
     });
     if (result && result.response) {
       const newImages = result.response as Record<string, any>;
-      console.log({ newImages });
       return newImages;
     } else {
       console.error("Failed to get images from Unsplash");
@@ -40,24 +39,34 @@ const fetchRandomImage = async (): Promise<Record<string, any> | null> => {
 };
 
 async function getJoke() {
-  const count = await prisma.joke.count();
-  const jokes = await prisma.joke.findMany({
-    take: 1,
-    skip: Math.floor(Math.random() * count),
-  });
-  return jokes.at(0);
+  let joke = null;
+  try {
+    const count = await prisma.joke.count();
+    const jokes = await prisma.joke.findMany({
+      take: 1,
+      skip: Math.floor(Math.random() * count),
+    });
+    joke = jokes.at(0);
+  } catch (err) {
+    console.error("Prisma failed to fetch joke ", err);
+  }
+  return joke;
 }
 
 export async function loader(/*params: LoaderFunctionArgs*/) {
   const joke = await getJoke();
   const image = await fetchRandomImage();
-  console.log({ joke });
-  console.log({ image });
+  // console.log({ joke });
+  // console.log({ image });
   return json({ joke, image });
 }
 
 export default function Index() {
   const { joke, image } = useLoaderData<typeof loader>();
+  if (!joke || !image) {
+    return <div>No data</div>;
+  }
+
   return (
     <div className="w-full">
       <div className="fixed top-0 w-full text-lg bg-gradient-to-r from-indigo-800 to-indigo-300 flex justify-between items-center z-20 p-1 text-slate-800">
