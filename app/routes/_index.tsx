@@ -1,9 +1,6 @@
 import { unsplash } from "~/lib/unsplash.server";
-import {
-  json,
-  type LoaderFunctionArgs,
-  type MetaFunction,
-} from "@remix-run/node";
+import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { json } from "@vercel/remix";
 import { Form, useLoaderData } from "@remix-run/react";
 import { prisma } from "~/lib/db.server";
 
