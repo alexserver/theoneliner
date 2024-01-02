@@ -31,7 +31,7 @@ export default function App() {
         <div className="w-full">
           <div className="fixed top-0 w-full text-lg bg-gradient-to-r from-indigo-800 to-indigo-300 flex justify-between items-center z-20 p-1 text-slate-800">
             <h3 className="text-2xl text-white">The oneliner</h3>
-            <p>A random joke comedian</p>
+            <p className="hidden md:block">A random joke comedian</p>
             <a
               href="https://github.com/alexserver/theoneliner"
               target="_blank"
