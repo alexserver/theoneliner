@@ -36,18 +36,26 @@ const fetchRandomImage = async (): Promise<Record<string, any> | null> => {
 };
 
 async function getJoke() {
-  let joke = null;
-  try {
-    const count = await prisma.joke.count();
-    const jokes = await prisma.joke.findMany({
-      take: 1,
-      skip: Math.floor(Math.random() * count),
-    });
-    joke = jokes.at(0);
-  } catch (err) {
-    console.error("Prisma failed to fetch joke ", err);
-  }
-  return joke;
+  // let joke = null;
+  // try {
+  //   const count = await prisma.joke.count();
+  //   const jokes = await prisma.joke.findMany({
+  //     take: 1,
+  //     skip: Math.floor(Math.random() * count),
+  //   });
+  //   joke = jokes.at(0);
+  // } catch (err) {
+  //   console.error("Prisma failed to fetch joke ", err);
+  // }
+  // return joke;
+  return {
+    id: 7,
+    content:
+      "Scientists have recently discovered a food that greatly reduces sex drive. It’s called wedding cake.",
+    author: "anonymous",
+    createdAt: "2023-12-30T22:56:31.848Z",
+    updatedAt: "2023-12-30T22:56:24.482Z",
+  };
 }
 
 export async function loader(/*params: LoaderFunctionArgs*/) {
