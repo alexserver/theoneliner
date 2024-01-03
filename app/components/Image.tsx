@@ -1,6 +1,7 @@
 "use client";
 
 import defaultRandomImage from "~/lib/defaultImagesList";
+import defaultStageImage from "~/assets/images/stage.jpg";
 
 interface ImageProps {
   image: Record<string, any> | null;
@@ -13,7 +14,12 @@ export const Image = ({ image }: ImageProps) => {
   const link = img.links?.html;
   return (
     <div className="w-full h-screen absolute top-0 left-0 z-0">
-      <img alt="theoneliner" src={src} className="w-full h-full object-cover" />
+      <img
+        alt="theoneliner"
+        src={src}
+        className="w-full h-full object-cover"
+        style={{ imageRendering: "pixelated" }}
+      />
       <a
         href={link}
         target="_blank"
@@ -21,6 +27,18 @@ export const Image = ({ image }: ImageProps) => {
       >
         Photo by {author}
       </a>
+    </div>
+  );
+};
+
+Image.Loading = () => {
+  return (
+    <div className="w-full h-screen absolute top-0 left-0 z-0">
+      <img
+        alt="theoneliner"
+        src={defaultStageImage}
+        className="w-full h-full object-cover"
+      />
     </div>
   );
 };

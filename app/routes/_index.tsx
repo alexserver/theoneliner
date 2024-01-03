@@ -1,6 +1,6 @@
 import { unsplash } from "~/lib/unsplash.server";
 import { json, type MetaFunction } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { prisma } from "~/lib/db.server";
 import { Image } from "~/components/Image";
 
@@ -60,6 +60,18 @@ export async function loader() {
 
 export default function Index() {
   const { joke, image } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+
+  if (navigation.state === "loading") {
+    return (
+      <>
+        <Image.Loading />
+        <h1 className="text-3xl text-center text-white bg-slate-900 rounded-xl z-10 p-4 opacity-80 font-bold max-w-3xl">
+          Next comedian coming...
+        </h1>
+      </>
+    );
+  }
 
   return (
     <>
