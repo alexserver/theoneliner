@@ -1,29 +1,44 @@
 "use client";
 
 import defaultRandomImage from "~/lib/defaultImagesList";
+import defaultStageImage from "~/assets/images/stage.jpg";
 
 interface ImageProps {
   image: Record<string, any> | null;
 }
 
 export const Image = ({ image }: ImageProps) => {
-  if (!image) {
-    const src = defaultRandomImage();
-    // rendering a random default image since the API has reached its max quota
-    return (
+  const img = image !== null ? image : defaultRandomImage();
+  const src = img.urls?.regular;
+  const author = img.user?.name;
+  const link = img.links?.html;
+  return (
+    <div className="w-full h-screen absolute top-0 left-0 z-0">
       <img
         alt="theoneliner"
         src={src}
-        className="w-full object-cover h-screen absolute top-0 left-0 z-0"
+        className="w-full h-full object-cover"
+        style={{ imageRendering: "pixelated" }}
       />
-    );
-  }
-  // rendering an actual random image from the API.
+      <a
+        href={link}
+        target="_blank"
+        className="absolute bottom-0 w-full text-sm text-right bg-slate-900/50 hover:bg-slate-900/90 text-white px-4 py-2"
+      >
+        Photo by {author}
+      </a>
+    </div>
+  );
+};
+
+Image.Loading = () => {
   return (
-    <img
-      alt="theoneliner"
-      src={image.urls.regular}
-      className="w-full object-cover h-screen absolute top-0 left-0 z-0"
-    />
+    <div className="w-full h-screen absolute top-0 left-0 z-0">
+      <img
+        alt="theoneliner"
+        src={defaultStageImage}
+        className="w-full h-full object-cover"
+      />
+    </div>
   );
 };
